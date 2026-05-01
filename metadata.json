@@ -1,0 +1,5 @@
+{
+  "name": "FaceSwap Studio",
+  "description": "Upload reference photos of yourself and a target photo to generate natural-looking face swaps with AI.",
+  "requestFramePermissions": []
+}
