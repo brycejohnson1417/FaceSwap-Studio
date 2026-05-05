@@ -540,10 +540,10 @@ export default function App() {
     return (
       <div className="min-h-screen bg-zinc-950 text-zinc-50 font-sans flex items-center justify-center p-6">
         <div className="glass-panel p-8 rounded-2xl max-w-md w-full text-center space-y-6">
-          <div className="w-16 h-16 bg-indigo-500/20 text-indigo-400 rounded-full flex items-center justify-center mx-auto mb-4">
+          <div className="w-16 h-16 bg-indigo-500/20 text-indigo-400 rounded-full flex items-center justify-center mx-auto mb-4 scale-110">
             <Key className="w-8 h-8" />
           </div>
-          <h2 className="text-2xl font-semibold">API Key Required</h2>
+          <h2 className="font-display text-2xl font-semibold">API Key Required</h2>
           <p className="text-zinc-400">
             To use the advanced Gemini 3.1 Flash Image model for high-quality face swapping, lighting matching, and expression detection, you need to select a paid Google Cloud API key.
           </p>
@@ -573,10 +573,10 @@ export default function App() {
       {/* Header */}
       <header className="sticky top-0 z-50 glass-panel border-b border-zinc-800/50 px-6 py-4 flex items-center justify-between">
         <div className="flex items-center gap-2">
-          <div className="w-8 h-8 rounded-lg bg-indigo-500 flex items-center justify-center">
+          <div className="w-8 h-8 rounded-lg bg-indigo-500 flex items-center justify-center shadow-lg shadow-indigo-500/20">
             <Sparkles className="w-5 h-5 text-white" />
           </div>
-          <h1 className="text-xl font-semibold tracking-tight hidden sm:block">FaceSwap Studio</h1>
+          <h1 className="font-display text-xl font-semibold tracking-tight hidden sm:block">FaceSwap Studio</h1>
         </div>
         
         <div className="flex bg-zinc-900 rounded-full p-1 border border-zinc-800 overflow-x-auto hide-scrollbar">
@@ -604,13 +604,26 @@ export default function App() {
         </div>
       </header>
 
-      <main className="max-w-7xl mx-auto px-6 mt-8">
-        {error && (
-          <div className="mb-8 p-4 bg-red-500/10 border border-red-500/20 rounded-xl text-red-400 flex items-start gap-3">
-            <Info className="w-5 h-5 shrink-0 mt-0.5" />
-            <p>{error}</p>
-          </div>
-        )}
+      <main className="max-w-7xl mx-auto px-6 mt-8 relative">
+        <AnimatePresence>
+          {error && (
+            <motion.div
+              initial={{ opacity: 0, y: 50, scale: 0.95 }}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
+              exit={{ opacity: 0, y: 20, scale: 0.95 }}
+              className="fixed bottom-6 right-6 z-50 max-w-sm p-4 bg-red-500/10 border border-red-500/20 backdrop-blur-xl shadow-2xl rounded-2xl text-red-400 flex items-start gap-3"
+            >
+              <Info className="w-5 h-5 shrink-0 mt-0.5" />
+              <div className="flex-1">
+                <h4 className="text-sm font-medium text-red-300">Error</h4>
+                <p className="text-sm mt-1">{error}</p>
+              </div>
+              <button onClick={() => setError(null)} className="text-red-400/50 hover:text-red-400 mt-0.5 transition-colors">
+                <X className="w-4 h-4" />
+              </button>
+            </motion.div>
+          )}
+        </AnimatePresence>
 
         <AnimatePresence mode="wait">
           {activeTab === 'profile' ? (
@@ -622,7 +635,7 @@ export default function App() {
               className="max-w-3xl mx-auto"
             >
               <div className="text-center mb-10">
-                <h2 className="text-3xl font-semibold tracking-tight mb-3">Your Identity</h2>
+                <h2 className="font-display text-3xl font-semibold tracking-tight mb-3">Your Identity</h2>
                 <p className="text-zinc-400">Upload clear photos of your face from different angles. These will be used to accurately recreate your likeness in the studio.</p>
               </div>
 
@@ -760,30 +773,30 @@ export default function App() {
                       <div>
                         <div className="flex justify-between text-xs text-zinc-400 mb-1.5">
                           <span>Head Scale</span>
-                          <span className="text-indigo-400">{faceAdjustments.scale}%</span>
+                          <span className="text-indigo-400 font-mono">{faceAdjustments.scale}%</span>
                         </div>
-                        <input type="range" min="80" max="120" value={faceAdjustments.scale} onChange={(e) => setFaceAdjustments({...faceAdjustments, scale: parseInt(e.target.value)})} className="w-full accent-indigo-500" />
+                        <input type="range" min="80" max="120" value={faceAdjustments.scale} onChange={(e) => setFaceAdjustments({...faceAdjustments, scale: parseInt(e.target.value)})} className="w-full" />
                       </div>
                       <div>
                         <div className="flex justify-between text-xs text-zinc-400 mb-1.5">
                           <span>Jawline</span>
-                          <span className="text-indigo-400">{faceAdjustments.jawline > 0 ? `+${faceAdjustments.jawline}` : faceAdjustments.jawline}</span>
+                          <span className="text-indigo-400 font-mono">{faceAdjustments.jawline > 0 ? `+${faceAdjustments.jawline}` : faceAdjustments.jawline}</span>
                         </div>
-                        <input type="range" min="-50" max="50" value={faceAdjustments.jawline} onChange={(e) => setFaceAdjustments({...faceAdjustments, jawline: parseInt(e.target.value)})} className="w-full accent-indigo-500" />
+                        <input type="range" min="-50" max="50" value={faceAdjustments.jawline} onChange={(e) => setFaceAdjustments({...faceAdjustments, jawline: parseInt(e.target.value)})} className="w-full" />
                       </div>
                       <div>
                         <div className="flex justify-between text-xs text-zinc-400 mb-1.5">
                           <span>Nose Size</span>
-                          <span className="text-indigo-400">{faceAdjustments.nose > 0 ? `+${faceAdjustments.nose}` : faceAdjustments.nose}</span>
+                          <span className="text-indigo-400 font-mono">{faceAdjustments.nose > 0 ? `+${faceAdjustments.nose}` : faceAdjustments.nose}</span>
                         </div>
-                        <input type="range" min="-50" max="50" value={faceAdjustments.nose} onChange={(e) => setFaceAdjustments({...faceAdjustments, nose: parseInt(e.target.value)})} className="w-full accent-indigo-500" />
+                        <input type="range" min="-50" max="50" value={faceAdjustments.nose} onChange={(e) => setFaceAdjustments({...faceAdjustments, nose: parseInt(e.target.value)})} className="w-full" />
                       </div>
                       <div>
                         <div className="flex justify-between text-xs text-zinc-400 mb-1.5">
                           <span>Eye Size</span>
-                          <span className="text-indigo-400">{faceAdjustments.eyes > 0 ? `+${faceAdjustments.eyes}` : faceAdjustments.eyes}</span>
+                          <span className="text-indigo-400 font-mono">{faceAdjustments.eyes > 0 ? `+${faceAdjustments.eyes}` : faceAdjustments.eyes}</span>
                         </div>
-                        <input type="range" min="-50" max="50" value={faceAdjustments.eyes} onChange={(e) => setFaceAdjustments({...faceAdjustments, eyes: parseInt(e.target.value)})} className="w-full accent-indigo-500" />
+                        <input type="range" min="-50" max="50" value={faceAdjustments.eyes} onChange={(e) => setFaceAdjustments({...faceAdjustments, eyes: parseInt(e.target.value)})} className="w-full" />
                       </div>
                     </div>
                   </div>
